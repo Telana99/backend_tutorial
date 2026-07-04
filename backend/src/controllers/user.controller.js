@@ -55,9 +55,25 @@ const loginUser = async(req,res) => {
 
 
     }
+};
+
+const logoutUser = async(req, res) => {
+    try{
+        const { email} = req.body;
+        const user = await User.findOne({email: email.toLowerCase()});
+        if(!user) return res.status(400).json({message: "User does not exist"});
+
+        res.status(200).json({message: "User logged out successfully", user: {id: user._id, email: user.email, username: user.username}});
+
+    }catch(error){
+        console.error("Logout error:", error);
+        return res.status(500).json({message: "Internal server error"});
+
+    }
 }
 
 export {
     registerUser,
-    loginUser
+    loginUser,
+    logoutUser
 };
